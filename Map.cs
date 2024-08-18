@@ -19,7 +19,7 @@ namespace Travelling_Salesman_Problem
 		{
 			int weight;
 			Node node1;
-			Node node22;
+			Node node2;
 			
 		}
 	}
