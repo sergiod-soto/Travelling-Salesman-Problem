@@ -20,7 +20,24 @@ namespace Travelling_Salesman_Problem
 			int weight;
 			Node node1;
 			Node node2;
-			
+
+
+			public Vertex(int w, Node n1, Node n2)
+			{
+				weight = w;
+				node1 = n1;
+				node2 = n2;
+			}
+
+			public Node[] getNodes()
+			{
+				return new Node[] { node1, node2 };
+			}
+
+			public int getWeight()
+			{
+				return weight;
+			}
 		}
 	}
 }
