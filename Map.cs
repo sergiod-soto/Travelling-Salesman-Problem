@@ -11,8 +11,27 @@ namespace Travelling_Salesman_Problem
 		private class Node
 		{
 			string name;
-			HashSet<Vertex> vertices;
+			Dictionary<string, Vertex> vertices;
 
+			public Node(string n)
+			{
+				name = n;
+			}
+
+
+			/*
+			 *  connect actual node to a new one
+			 */
+			public void connectTo(Node node, int weight)
+			{
+				if (vertices.ContainsKey(node.name))
+				{
+					throw new MapException("Node already exist");
+				}
+
+				Vertex vertex = new Vertex(weight, this, node);
+				vertices.Add(node.name, vertex);
+			}
 		}
 
 		private class Vertex
@@ -38,6 +57,14 @@ namespace Travelling_Salesman_Problem
 			{
 				return weight;
 			}
+		}
+
+		private class MapException : Exception
+		{
+			public MapException(string message) : base(message)
+			{
+			}
+
 		}
 	}
 }
