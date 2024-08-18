@@ -61,10 +61,7 @@ namespace Travelling_Salesman_Problem
 
 		private class MapException : Exception
 		{
-			public MapException(string message) : base(message)
-			{
-			}
-
+			public MapException(string message) : base(message) { }
 		}
 	}
 }
