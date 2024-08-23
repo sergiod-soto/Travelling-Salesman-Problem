@@ -8,6 +8,13 @@ namespace Travelling_Salesman_Problem
 {
 	public class Map
 	{
+
+		public Map(string[] nodes, int[][] matrix)
+		{
+
+		}
+
+
 		private class Node
 		{
 			string name;
@@ -26,7 +33,7 @@ namespace Travelling_Salesman_Problem
 			{
 				if (vertices.ContainsKey(node.name))
 				{
-					throw new MapException("Node already exist");
+					throw new MapException($"Already connected to node \"{node.name}\"");
 				}
 
 				Vertex vertex = new Vertex(weight, this, node);
