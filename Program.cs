@@ -7,18 +7,20 @@ namespace Travelling_Salesman_Problem
 		static void Main(string[] args)
 		{
 			string[] text = CSVParser.readMapGraph(@"G:\Portfolio\Algoritmos\Problema del viajante\Travelling Salesman Problem\CSV\map.csv");
-			string[] nodes = CSVParser.parseLine(text[0]); // nodes' names
+			string[] nodesLine = CSVParser.parseLine(text[0]);
+
+			string[] nodes = new string[nodesLine.Length - 1];
+			Array.Copy(nodesLine, nodes, 1);     // nodes' names
 
 			int[][] weightMatrix = new int[text.Length - 1][];
 			for (int i = 0; i < text.Length - 1; i++)
 			{
-				string[] row = CSVParser.parseLine(text[i]);
-				for (int j = 0; j < text.Length - 1; j++)
+				string[] row = CSVParser.parseLine(text[i + 1]);
+				for (int j = 0; j < nodes.Length; j++)
 				{
 					try
 					{
-						int parsedWeight = Int32.Parse(row[j + 1]);
-						weightMatrix[i][j] = parsedWeight;
+						weightMatrix[i][j] = Int32.Parse(row[j + 1]);
 					}
 					catch (FormatException)
 					{
@@ -26,6 +28,14 @@ namespace Travelling_Salesman_Problem
 						return;
 					}
 
+				}
+			}
+			for (int i = 0; i < weightMatrix.Length; i++)
+			{
+				Console.WriteLine("\ni: " + i);
+				for (int j = 0; j < weightMatrix[i].Length; j++)
+				{
+					Console.Write(weightMatrix[i][j]);
 				}
 			}
 		}
