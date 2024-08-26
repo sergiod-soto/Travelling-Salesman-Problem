@@ -8,10 +8,20 @@ namespace Travelling_Salesman_Problem
 {
 	public class Map
 	{
+		private Dictionary<string, Node> map;
+		private Node mainNode;
 
 		public Map(string[] nodes, int[][] matrix)
 		{
 
+		}
+
+		public void print()
+		{
+			if (map == null || map.Count() == 0)
+			{
+				throw new PrintException("Error printing the map: map null or empty");
+			}
 		}
 
 
@@ -69,6 +79,11 @@ namespace Travelling_Salesman_Problem
 		private class MapException : Exception
 		{
 			public MapException(string message) : base(message) { }
+		}
+
+		private class PrintException : Exception
+		{
+			public PrintException(string message) : base(message) { }
 		}
 	}
 }
