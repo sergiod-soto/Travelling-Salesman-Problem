@@ -8,6 +8,27 @@ namespace Travelling_Salesman_Problem
 {
 	public class Map
 	{
+		private Dictionary<string, Node> map;
+		private Node mainNode;
+
+		public Map(string[] nodes, int[][] matrix)
+		{
+			// first node becomes main node
+
+		}
+
+		public void print()
+		{
+			if (map == null || map.Count == 0)
+			{
+				Console.WriteLine("Map empty or null");
+				return;
+			}
+
+
+		}
+
+
 		private class Node
 		{
 			string name;
@@ -26,7 +47,7 @@ namespace Travelling_Salesman_Problem
 			{
 				if (vertices.ContainsKey(node.name))
 				{
-					throw new MapException("Node already exist");
+					throw new MapException($"Already connected to node \"{node.name}\"");
 				}
 
 				Vertex vertex = new Vertex(weight, this, node);
@@ -61,10 +82,7 @@ namespace Travelling_Salesman_Problem
 
 		private class MapException : Exception
 		{
-			public MapException(string message) : base(message)
-			{
-			}
-
+			public MapException(string message) : base(message) { }
 		}
 	}
 }
