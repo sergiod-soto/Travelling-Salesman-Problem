@@ -13,15 +13,19 @@ namespace Travelling_Salesman_Problem
 
 		public Map(string[] nodes, int[][] matrix)
 		{
+			// first node becomes main node
 
 		}
 
 		public void print()
 		{
-			if (map == null || map.Count() == 0)
+			if (map == null || map.Count == 0)
 			{
-				throw new PrintException("Error printing the map: map null or empty");
+				Console.WriteLine("Map empty or null");
+				return;
 			}
+
+
 		}
 
 
@@ -79,11 +83,6 @@ namespace Travelling_Salesman_Problem
 		private class MapException : Exception
 		{
 			public MapException(string message) : base(message) { }
-		}
-
-		private class PrintException : Exception
-		{
-			public PrintException(string message) : base(message) { }
 		}
 	}
 }
