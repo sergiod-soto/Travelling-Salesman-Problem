@@ -26,6 +26,104 @@ namespace Travelling_Salesman_Problem
 			}
 
 
+
+
+		}
+
+		// TODO
+		static void DrawGraph(Dictionary<string, List<string>> graph)
+		{
+			// Vamos a usar un diccionario para almacenar las posiciones de los nodos
+			var positions = new Dictionary<string, (int x, int y)>
+		{
+			{ "A", (2, 1) },
+			{ "B", (8, 1) },
+			{ "C", (2, 3) },
+			{ "D", (8, 3) }
+		};
+
+			char[,] grid = new char[5, 11]; // 5 rows, 11 columns
+
+			for (int i = 0; i < 5; i++)
+			{
+				for (int j = 0; j < 11; j++)
+				{
+					grid[i, j] = ' ';
+				}
+			}
+
+			// Draw vertices
+			foreach (var node in graph)
+			{
+				var pos1 = positions[node.Key];
+				foreach (var neighbor in node.Value)
+				{
+					var pos2 = positions[neighbor];
+					DrawLine(grid, pos1, pos2);
+				}
+			}
+
+			// Draw nodes
+			foreach (var node in positions)
+			{
+				grid[node.Value.y, node.Value.x] = node.Key[0];
+			}
+
+			// Print
+			for (int i = 0; i < 5; i++)
+			{
+				for (int j = 0; j < 11; j++)
+				{
+					Console.Write(grid[i, j]);
+				}
+				Console.WriteLine();
+			}
+
+		}
+		static void DrawLine(char[,] grid, (int x, int y) start, (int x, int y) end)
+		{
+			// Draw horizontal line
+			if (start.y == end.y)
+			{
+				int minX = Math.Min(start.x, end.x);
+				int maxX = Math.Max(start.x, end.x);
+				for (int x = minX + 1; x < maxX; x++)
+				{
+					grid[start.y, x] = '-';
+				}
+			}
+			// Draw vertical line
+			else if (start.x == end.x)
+			{
+				int minY = Math.Min(start.y, end.y);
+				int maxY = Math.Max(start.y, end.y);
+				for (int y = minY + 1; y < maxY; y++)
+				{
+					grid[y, start.x] = '|';
+				}
+			}
+			// Draw diagonal line
+			else
+			{
+				int deltaX = end.x - start.x;
+				int deltaY = end.y - start.y;
+
+				if (Math.Abs(deltaX) == Math.Abs(deltaY))
+				{
+					int xStep = deltaX / Math.Abs(deltaX);
+					int yStep = deltaY / Math.Abs(deltaY);
+
+					int x = start.x + xStep;
+					int y = start.y + yStep;
+
+					while (x != end.x && y != end.y)
+					{
+						grid[y, x] = '\\';
+						x += xStep;
+						y += yStep;
+					}
+				}
+			}
 		}
 
 
