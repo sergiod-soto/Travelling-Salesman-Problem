@@ -7,6 +7,7 @@ namespace Travelling_Salesman_Problem
 		static void Main(string[] args)
 		{
 			TravellingSalesmanProblem tsp = new TravellingSalesmanProblem();
+			tsp.map.Print();
 		}
 	}
 }
