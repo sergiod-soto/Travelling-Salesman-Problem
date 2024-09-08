@@ -17,18 +17,28 @@ namespace Travelling_Salesman_Problem
 		 **/
 		public static string[] readMapGraph(string path)
 		{
-			using (var reader = new StreamReader(path))
+			try
 			{
-				List<string> listA = new List<string>();
-				while (!reader.EndOfStream)
+				using (var reader = new StreamReader(path))
 				{
-					var line = reader.ReadLine();
-					var values = line.Split(';');
+					List<string> listA = new List<string>();
+					while (!reader.EndOfStream)
+					{
+						var line = reader.ReadLine();
+						var values = line.Split(';');
 
-					listA.Add(values[0]);
+						listA.Add(values[0]);
+					}
+					return listA.ToArray();
 				}
-				return listA.ToArray();
 			}
+			catch (Exception)
+			{
+				Console.WriteLine("Error reading map");
+				Environment.Exit(0);
+				return null;
+			}
+
 		}
 
 		static void writeCSV(string path)
