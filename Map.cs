@@ -8,23 +8,29 @@ namespace Travelling_Salesman_Problem
 {
 	public class Map
 	{
-		private Dictionary<string, Node> map;
-		private Node mainNode;
+		public Dictionary<string, Node> nodes;
+		public Node mainNode;
 
 		public Map(string[] nodes, int[][] matrix)
 		{
-			// first node becomes main node
+			this.nodes = new Dictionary<string, Node>();
+			foreach (string nodeName in nodes)
+			{
+				this.nodes.Add(nodeName, new Node(nodeName));
+			}
 
 		}
 
+
+
 		public void Print()
 		{
-			if (map == null || map.Count == 0)
+			if (nodes == null || nodes.Count == 0)
 			{
 				Console.WriteLine("\n\nMap empty or null\n\n");
 				return;
 			}
-			PrintGraph(map);
+			PrintGraph(nodes);
 
 
 
@@ -50,7 +56,7 @@ namespace Travelling_Salesman_Problem
 			}
 		}
 
-		private class Node
+		public class Node
 		{
 			public string name;
 			public Dictionary<string, Vertex> vertices;
@@ -58,6 +64,7 @@ namespace Travelling_Salesman_Problem
 			public Node(string n)
 			{
 				name = n;
+				vertices = new Dictionary<string, Vertex>();
 			}
 
 
@@ -76,7 +83,7 @@ namespace Travelling_Salesman_Problem
 			}
 		}
 
-		private class Vertex
+		public class Vertex
 		{
 			public int weight;
 			public Node node1;
