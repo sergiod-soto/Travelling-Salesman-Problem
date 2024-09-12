@@ -41,12 +41,9 @@ namespace Travelling_Salesman_Problem
 				weightMatrix[i] = matrixRow;
 			}
 
-			//
-			foreach (String node in nodes)
-			{
-				Console.Write(node + ", ");
-			}
 			map = new Map(nodes, weightMatrix);
+
+			map.mainNode = map.nodes["Ampuero"];
 		}
 	}
 }

@@ -8,33 +8,58 @@ namespace Travelling_Salesman_Problem
 {
 	public class Map
 	{
-		private Dictionary<string, Node> map;
-		private Node mainNode;
+		public Dictionary<string, Node> nodes;
+		public Node mainNode;
 
-		public Map(string[] nodes, int[][] matrix)
+		public Map(string[] n, int[][] matrix)
 		{
-			// first node becomes main node
+			nodes = new Dictionary<string, Node>();
 
+			// create each node
+			foreach (string nodeName in n)
+			{
+				nodes.Add(nodeName, new Node(nodeName));
+			}
+
+			// add vertices
+			int i = 0;
+			foreach (string nodeName in n)
+			{
+				Node node = nodes[nodeName];
+				int[] weights = matrix[i];
+				i++;
+
+				int nodeIterator = 0;
+				foreach (int weight in weights)
+				{
+					Node nodeTo = nodes[n[nodeIterator]];
+					try
+					{
+						node.connectTo(nodeTo, weight);
+					}
+					finally
+					{
+						nodeIterator++;
+					}
+				}
+			}
 		}
+
 
 		public void Print()
 		{
-			if (map == null || map.Count == 0)
+			if (nodes == null || nodes.Count == 0)
 			{
 				Console.WriteLine("\n\nMap empty or null\n\n");
 				return;
 			}
-			PrintGraph(map);
-
-
-
+			PrintGraph(nodes);
 		}
 
-		// Método para imprimir el grafo
 		static void PrintGraph(Dictionary<string, Node> map)
 		{
 			Console.WriteLine("Graph Representation:");
-			Console.WriteLine("======================");
+			Console.WriteLine("======================\n");
 			foreach (var nodeEntry in map)
 			{
 				Node node = nodeEntry.Value;
@@ -43,14 +68,16 @@ namespace Travelling_Salesman_Problem
 				foreach (var vertexEntry in node.vertices)
 				{
 					Vertex vertex = vertexEntry.Value;
-					// Imprimimos la conexión con peso y nodo conectado
-					Console.WriteLine($"  └──> {vertex.node1.name} (Weight: {vertex.weight})");
+					if (vertex.weight > 0)
+					{
+						Console.WriteLine($"  └──> {vertex.node2.name} (Weight: {vertex.weight})");
+					}
 				}
 				Console.WriteLine();
 			}
 		}
 
-		private class Node
+		public class Node
 		{
 			public string name;
 			public Dictionary<string, Vertex> vertices;
@@ -58,6 +85,7 @@ namespace Travelling_Salesman_Problem
 			public Node(string n)
 			{
 				name = n;
+				vertices = new Dictionary<string, Vertex>();
 			}
 
 
@@ -76,7 +104,7 @@ namespace Travelling_Salesman_Problem
 			}
 		}
 
-		private class Vertex
+		public class Vertex
 		{
 			public int weight;
 			public Node node1;

@@ -32,9 +32,9 @@ namespace Travelling_Salesman_Problem
 					return listA.ToArray();
 				}
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
-				Console.WriteLine("Error reading map");
+				Console.WriteLine("Error reading nodes: " + e.Message);
 				Environment.Exit(0);
 				return null;
 			}
