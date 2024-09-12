@@ -11,16 +11,39 @@ namespace Travelling_Salesman_Problem
 		public Dictionary<string, Node> nodes;
 		public Node mainNode;
 
-		public Map(string[] nodes, int[][] matrix)
+		public Map(string[] n, int[][] matrix)
 		{
-			this.nodes = new Dictionary<string, Node>();
-			foreach (string nodeName in nodes)
+			nodes = new Dictionary<string, Node>();
+
+			// create each node
+			foreach (string nodeName in n)
 			{
-				this.nodes.Add(nodeName, new Node(nodeName));
+				nodes.Add(nodeName, new Node(nodeName));
 			}
 
-		}
+			// add vertices
+			int i = 0;
+			foreach (string nodeName in n)
+			{
+				Node node = nodes[nodeName];
+				int[] weights = matrix[i];
+				i++;
 
+				int nodeIterator = 0;
+				foreach (int weight in weights)
+				{
+					Node nodeTo = nodes[n[nodeIterator]];
+					try
+					{
+						node.connectTo(nodeTo, weight);
+					}
+					finally
+					{
+						nodeIterator++;
+					}
+				}
+			}
+		}
 
 
 		public void Print()
@@ -31,16 +54,12 @@ namespace Travelling_Salesman_Problem
 				return;
 			}
 			PrintGraph(nodes);
-
-
-
 		}
 
-		// Método para imprimir el grafo
 		static void PrintGraph(Dictionary<string, Node> map)
 		{
 			Console.WriteLine("Graph Representation:");
-			Console.WriteLine("======================");
+			Console.WriteLine("======================\n");
 			foreach (var nodeEntry in map)
 			{
 				Node node = nodeEntry.Value;
@@ -49,8 +68,10 @@ namespace Travelling_Salesman_Problem
 				foreach (var vertexEntry in node.vertices)
 				{
 					Vertex vertex = vertexEntry.Value;
-					// Imprimimos la conexión con peso y nodo conectado
-					Console.WriteLine($"  └──> {vertex.node1.name} (Weight: {vertex.weight})");
+					if (vertex.weight > 0)
+					{
+						Console.WriteLine($"  └──> {vertex.node2.name} (Weight: {vertex.weight})");
+					}
 				}
 				Console.WriteLine();
 			}
