@@ -8,13 +8,12 @@ namespace Travelling_Salesman_Problem
 {
 	class TravellingSalesmanProblem
 	{
-
 		public Map map;
+		Map.Node mainNode;
 
-
-		public TravellingSalesmanProblem()
+		public TravellingSalesmanProblem(string mapRoute, string mainNodeName)
 		{
-			string[] text = CSVParser.readMapGraph(@"G:\Portfolio\Algoritmos\Problema del viajante\Travelling Salesman Problem\CSV\map.csv");
+			string[] text = CSVParser.readMapGraph(mapRoute);
 
 			string[] nodesLine = CSVParser.parseLine(text[0]);
 			string[] nodes = nodesLine.Skip(1).ToArray();
@@ -40,10 +39,18 @@ namespace Travelling_Salesman_Problem
 				}
 				weightMatrix[i] = matrixRow;
 			}
-
 			map = new Map(nodes, weightMatrix);
+			mainNode = map.nodes[mainNodeName];
+		}
 
-			map.mainNode = map.nodes["Ampuero"];
+		public string[] solve()
+		{
+			return solve(map, mainNode);
+		}
+
+		public string[] solve(Map map, Map.Node mainNode)
+		{
+			return null;
 		}
 	}
 }
