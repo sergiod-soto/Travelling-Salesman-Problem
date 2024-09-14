@@ -10,11 +10,51 @@ namespace Travelling_Salesman_Problem
 	{
 
 		public Map map;
+		string[] text;
+		Solution solution;
 
 
-		public TravellingSalesmanProblem()
+
+
+
+		public TravellingSalesmanProblem() { }
+
+		class Solution
 		{
-			string[] text = CSVParser.readMapGraph(@"G:\Portfolio\Algoritmos\Problema del viajante\Travelling Salesman Problem\CSV\map.csv");
+			public string[] path;
+			public int weight;
+
+			public Solution(string[] path, int weight)
+			{
+				this.path = path;
+				this.weight = weight;
+			}
+			public void print()
+			{
+				// capitalize first letter
+				for (int i = 0; i < path.Length; i++)
+				{
+					path[i] = path[i].ToLower();
+					path[i] = char.ToUpper(path[i][0]) + path[i].Substring(1);
+				}
+
+				Console.Write("Best route found:\n\n└──>");
+				for (int i = 0; i < path.Length - 1; i++)
+				{
+					Console.Write(path[i] + " -> ");
+				}
+				Console.Write(path[path.Length - 1]);
+			}
+		}
+
+		public string[] solve()
+		{
+			if (map == null ||
+				text == null)
+			{
+				Console.WriteLine("Error. Be sure to configure parameters before solving.");
+				return null;
+			}
 
 			string[] nodesLine = CSVParser.parseLine(text[0]);
 			string[] nodes = nodesLine.Skip(1).ToArray();
@@ -34,16 +74,49 @@ namespace Travelling_Salesman_Problem
 					catch (FormatException)
 					{
 						Console.WriteLine($"Format error on CSV, line: {i}");
-						return;
+						return null;
 					}
 
 				}
 				weightMatrix[i] = matrixRow;
 			}
-
 			map = new Map(nodes, weightMatrix);
 
-			map.mainNode = map.nodes["Ampuero"];
+
+			// TODO
+			//
+			// falta la parte que resuelve
+
+
+			return null;
+		}
+		public void setMap(string path)
+		{
+			text = CSVParser.readMapGraph(path);
+		}
+		public bool setMainNode(string nodeName)
+		{
+			nodeName = nodeName.ToLower();
+			if (map == null ||
+				map.nodes == null ||
+				map.nodes.Count == 0 ||
+				map.nodes.ContainsKey(nodeName) == false)
+			{
+				return false;
+			}
+
+			map.mainNode = map.nodes[nodeName];
+			return true;
+		}
+
+		public void print()
+		{
+			if (solution == null)
+			{
+				Console.WriteLine("No solution found");
+				return;
+			}
+			solution.print();
 		}
 	}
 }

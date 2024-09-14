@@ -29,7 +29,12 @@ namespace Travelling_Salesman_Problem
 
 						listA.Add(values[0]);
 					}
-					return listA.ToArray();
+					string[] list = listA.ToArray();
+					for (int i = 0; i < list.Length; i++)
+					{
+						list[i] = list[i].ToLower();
+					}
+					return list;
 				}
 			}
 			catch (Exception e)
