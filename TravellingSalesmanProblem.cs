@@ -8,7 +8,6 @@ namespace Travelling_Salesman_Problem
 {
 	class TravellingSalesmanProblem
 	{
-
 		public Map map;
 		string[] text;
 		Solution solution;

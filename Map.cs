@@ -9,7 +9,6 @@ namespace Travelling_Salesman_Problem
 	public class Map
 	{
 		public Dictionary<string, Node> nodes;
-		public Node mainNode;
 
 		public Map(string[] n, int[][] matrix)
 		{
@@ -54,6 +53,11 @@ namespace Travelling_Salesman_Problem
 				return;
 			}
 			PrintGraph(nodes);
+		}
+		public void Print(string msg)
+		{
+			Console.WriteLine(msg);
+			Print();
 		}
 
 		static void PrintGraph(Dictionary<string, Node> map)
