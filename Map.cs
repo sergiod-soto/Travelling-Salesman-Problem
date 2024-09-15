@@ -9,6 +9,7 @@ namespace Travelling_Salesman_Problem
 	public class Map
 	{
 		public Dictionary<string, Node> nodes;
+		public Node mainNode;
 
 		public Map(string[] n, int[][] matrix)
 		{
@@ -126,16 +127,27 @@ namespace Travelling_Salesman_Problem
 			{
 				return new Node[] { node1, node2 };
 			}
-
-			public int getWeight()
-			{
-				return weight;
-			}
 		}
 
+		public int routeWeight(Dictionary<string, Node> nodes, string[] route)
+		{
+			int sum = 0;
+
+			for (int i = 0; i < route.Length - 2; i++)
+			{
+				Node node1 = nodes[route[i]];
+				Node node2 = nodes[route[i + 1]];
+
+				sum += node1.vertices[node2.name].weight;
+			}
+
+			return sum;
+		}
 		private class MapException : Exception
 		{
 			public MapException(string message) : base(message) { }
 		}
+
+
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Travelling_Salesman_Problem.Map;
 
 namespace Travelling_Salesman_Problem
 {
@@ -10,7 +11,7 @@ namespace Travelling_Salesman_Problem
 	{
 		public Map map;
 		string[] text;
-		Solution solution;
+		public Solution solution;
 
 
 
@@ -18,7 +19,7 @@ namespace Travelling_Salesman_Problem
 
 		public TravellingSalesmanProblem() { }
 
-		class Solution
+		public class Solution
 		{
 			public string[] path;
 			public int weight;
@@ -28,7 +29,7 @@ namespace Travelling_Salesman_Problem
 				this.path = path;
 				this.weight = weight;
 			}
-			public void print()
+			public void Print()
 			{
 				// capitalize first letter
 				for (int i = 0; i < path.Length; i++)
@@ -37,23 +38,25 @@ namespace Travelling_Salesman_Problem
 					path[i] = char.ToUpper(path[i][0]) + path[i].Substring(1);
 				}
 
-				Console.Write("Best route found:\n\n└──>");
+				Console.Write("Best route found:\n\n└──>  ");
 				for (int i = 0; i < path.Length - 1; i++)
 				{
 					Console.Write(path[i] + " -> ");
 				}
-				Console.Write(path[path.Length - 1]);
+				Console.WriteLine(path[path.Length - 1]);
+				Console.WriteLine("Weight: " + weight);
 			}
 		}
 
-		public string[] solve()
+		public Solution Solve()
 		{
-			if (map == null ||
-				text == null)
-			{
-				Console.WriteLine("Error. Be sure to configure parameters before solving.");
-				return null;
-			}
+			Solution solution = NN_Solver(map);
+			solution.weight = map.routeWeight(map.nodes, solution.path);
+			return solution;
+		}
+		public void setMap(string path)
+		{
+			text = CSVParser.readMapGraph(path);
 
 			string[] nodesLine = CSVParser.parseLine(text[0]);
 			string[] nodes = nodesLine.Skip(1).ToArray();
@@ -73,25 +76,13 @@ namespace Travelling_Salesman_Problem
 					catch (FormatException)
 					{
 						Console.WriteLine($"Format error on CSV, line: {i}");
-						return null;
+						return;
 					}
 
 				}
 				weightMatrix[i] = matrixRow;
 			}
 			map = new Map(nodes, weightMatrix);
-
-
-			// TODO
-			//
-			// falta la parte que resuelve
-
-
-			return null;
-		}
-		public void setMap(string path)
-		{
-			text = CSVParser.readMapGraph(path);
 		}
 		public bool setMainNode(string nodeName)
 		{
@@ -105,17 +96,70 @@ namespace Travelling_Salesman_Problem
 			}
 
 			map.mainNode = map.nodes[nodeName];
+
 			return true;
 		}
 
-		public void print()
+		public Solution NN_Solver(Map map)
 		{
-			if (solution == null)
+			if (map == null || map.nodes == null || map.nodes.Count == 0 || map.mainNode == null)
 			{
-				Console.WriteLine("No solution found");
-				return;
+				Console.WriteLine("Error. Be sure to configure parameters before solving.");
+				return null;
 			}
-			solution.print();
+
+			// Inicializar variables
+			List<string> visitedNodes = new List<string>(); // Para rastrear los nodos visitados
+			Node currentNode = map.mainNode; // Comenzamos desde el nodo principal
+			int totalWeight = 0;
+
+			// Añadir el nodo principal a los visitados
+			visitedNodes.Add(currentNode.name);
+
+			// Mientras queden nodos sin visitar
+			while (visitedNodes.Count < map.nodes.Count)
+			{
+				Vertex nearestVertex = null;
+				int minWeight = int.MaxValue;
+
+				// Buscar el nodo vecino no visitado más cercano
+				foreach (var vertexEntry in currentNode.vertices)
+				{
+					Vertex vertex = vertexEntry.Value;
+					if (!visitedNodes.Contains(vertex.node2.name) && vertex.weight < minWeight)
+					{
+						nearestVertex = vertex;
+						minWeight = vertex.weight;
+					}
+				}
+
+				// Si encontramos un nodo cercano, lo visitamos
+				if (nearestVertex != null)
+				{
+					currentNode = nearestVertex.node2;
+					visitedNodes.Add(currentNode.name);
+					totalWeight += nearestVertex.weight;
+				}
+				else
+				{
+					// No hay más nodos que visitar desde aquí
+					break;
+				}
+			}
+
+			// Volver al nodo inicial para cerrar el ciclo
+			if (visitedNodes.Count == map.nodes.Count)
+			{
+				if (currentNode.vertices.ContainsKey(map.mainNode.name))
+				{
+					totalWeight += currentNode.vertices[map.mainNode.name].weight;
+					visitedNodes.Add(map.mainNode.name); // Añadir nodo inicial al final
+				}
+			}
+
+			// Guardar y mostrar la solución
+			solution = new Solution(visitedNodes.ToArray(), totalWeight);
+			return solution;
 		}
 	}
 }

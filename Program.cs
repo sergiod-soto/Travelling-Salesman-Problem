@@ -1,4 +1,5 @@
 ﻿using System;
+using static Travelling_Salesman_Problem.TravellingSalesmanProblem;
 
 namespace Travelling_Salesman_Problem
 {
@@ -13,9 +14,8 @@ namespace Travelling_Salesman_Problem
 
 			tsp.map.Print();
 
-			//string[] solution = tsp.solve();
-
-
+			Solution solution = tsp.Solve();
+			solution.Print();
 		}
 	}
 }
