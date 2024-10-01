@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,13 @@ namespace Travelling_Salesman_Problem
 
 		public class Solution
 		{
+			public enum SolvingMethods
+			{
+				NearestN_Solver,
+				otro
+			}
+
+
 			public string[] path;
 			public int weight;
 
@@ -38,7 +46,15 @@ namespace Travelling_Salesman_Problem
 					path[i] = char.ToUpper(path[i][0]) + path[i].Substring(1);
 				}
 
-				Console.Write("Best route found:\n\n└──>  ");
+				Console.Write(
+					"\n" +
+					"\n" +
+					"\n" +
+					"\n" +
+					"Best route found:" +
+					"\n" +
+					"\n" +
+					"└──>  ");
 				for (int i = 0; i < path.Length - 1; i++)
 				{
 					Console.Write(path[i] + " -> ");
@@ -48,12 +64,24 @@ namespace Travelling_Salesman_Problem
 			}
 		}
 
-		public Solution Solve()
+
+		public Solution Solve(Solution.SolvingMethods method)
 		{
-			Solution solution = NN_Solver(map);
-			solution.weight = map.routeWeight(map.nodes, solution.path);
-			return solution;
+			switch (method)
+			{
+				case (Solution.SolvingMethods.NearestN_Solver):
+					Solution solution = NearestNeightbor_Solver(map);
+
+					solution.weight = map.routeWeight(map.nodes, solution.path);
+					return solution;
+
+				case (Solution.SolvingMethods.otro):
+
+					break;
+			}
+			return null;
 		}
+
 		public void setMap(string path)
 		{
 			text = CSVParser.readMapGraph(path);
@@ -100,7 +128,11 @@ namespace Travelling_Salesman_Problem
 			return true;
 		}
 
-		public Solution NN_Solver(Map map)
+
+		/*
+		 *  method based on nearest neighbord
+		 */
+		public Solution NearestNeightbor_Solver(Map map)
 		{
 			if (map == null || map.nodes == null || map.nodes.Count == 0 || map.mainNode == null)
 			{
@@ -126,7 +158,7 @@ namespace Travelling_Salesman_Problem
 				foreach (var vertexEntry in currentNode.vertices)
 				{
 					Vertex vertex = vertexEntry.Value;
-					if (!visitedNodes.Contains(vertex.node2.name) && vertex.weight < minWeight)
+					if (!visitedNodes.Contains(vertex.node2.name) && vertex.weight < minWeight && vertex.weight > 0)
 					{
 						nearestVertex = vertex;
 						minWeight = vertex.weight;
