@@ -24,8 +24,8 @@ namespace Travelling_Salesman_Problem
 		{
 			public enum SolvingMethods
 			{
-				NearestN_Solver,
-				otro
+				NearestNeightbor_Solver,
+				BruteForce_Solver
 			}
 
 
@@ -67,20 +67,26 @@ namespace Travelling_Salesman_Problem
 
 		public Solution Solve(Solution.SolvingMethods method)
 		{
+			Solution solution = null;
+
 			switch (method)
 			{
-				case (Solution.SolvingMethods.NearestN_Solver):
-					Solution solution = NearestNeightbor_Solver(map);
+				case Solution.SolvingMethods.NearestNeightbor_Solver:
+					solution = NearestNeightbor_Solver(map);
+					break;
 
-					solution.weight = map.routeWeight(map.nodes, solution.path);
-					return solution;
-
-				case (Solution.SolvingMethods.otro):
-
+				case Solution.SolvingMethods.BruteForce_Solver:
+					solution = BruteForce_Solver(map);
 					break;
 			}
-			return null;
+
+			if (solution != null)
+			{
+				solution.weight = map.routeWeight(map.nodes, solution.path);
+			}
+			return solution;
 		}
+
 
 		public void setMap(string path)
 		{
@@ -193,5 +199,80 @@ namespace Travelling_Salesman_Problem
 			solution = new Solution(visitedNodes.ToArray(), totalWeight);
 			return solution;
 		}
+
+
+
+
+
+
+
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////
+
+		/*
+		 *  brute force aproach
+		 */
+		public Solution BruteForce_Solver(Map map)
+		{
+			GeneratePaths(map.mainNode);
+			return null;
+		}
+
+		public LinkedList<Node> GeneratePaths(Node node)
+		{
+
+
+			return null;
+		}
+
+		/*
+		 *  
+		 */
+		public Node[] NodeCombination(Node node)
+		{
+			int numOfVertices = node.vertices.Keys.Count;
+			Node[] nodes = new Node[numOfVertices];
+			IEnumerator<string> ite = node.vertices.Keys.GetEnumerator();
+			ite.MoveNext();
+
+			for (int i = 0; i < numOfVertices; i++)
+			{
+				nodes[i] = new Node(node.name);
+				nodes[i].connectTo(new Node(node.vertices[ite.Current].node2.name), node.vertices[ite.Current].weight);
+
+				ite.MoveNext();
+			}
+			return nodes;
+		}
+
+
+		/*
+		 *  obtain a copy of a node with the first nodes conected
+		 */
+		public Node DuplicateNode(Node node)
+		{
+
+		}
+
+		public void PrintNodesArray(Node[] aux)
+		{
+			int i = 0;
+			foreach (Node node in aux)
+			{
+				Console.Write("- [" + i + "] ");
+				i++;
+
+				Node actualNode = node;
+				while (actualNode.vertices.Count > 0)
+				{
+					Console.Write(actualNode.name + ", ");
+					IEnumerator<string> ite = actualNode.vertices.Keys.GetEnumerator();
+					ite.MoveNext();
+					actualNode = actualNode.vertices[ite.Current].node2;
+				}
+				Console.WriteLine(actualNode.name);
+			}
+		}
 	}
 }
+

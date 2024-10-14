@@ -95,7 +95,7 @@ namespace Travelling_Salesman_Problem
 
 
 			/*
-			 *  connect actual node to a new one
+			 *  connect actual node to node2
 			 */
 			public void connectTo(Node node, int weight)
 			{
@@ -106,6 +106,16 @@ namespace Travelling_Salesman_Problem
 
 				Vertex vertex = new Vertex(weight, this, node);
 				vertices.Add(node.name, vertex);
+
+				// connect node2 to node1
+				//node.vertices.Add(this.name, new Vertex(weight, node, this));
+			}
+
+			public Vertex getFirstVertex()
+			{
+				IEnumerator<string> ite = vertices.Keys.GetEnumerator();
+				ite.MoveNext();
+				return vertices[ite.Current];
 			}
 		}
 
